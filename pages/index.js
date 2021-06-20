@@ -1,8 +1,71 @@
+import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.scss'
+import { getLocation, getProduct, addToCart } from '../lib/api'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import ModalBox from '../component/ModalBox'
 
-export default function Home() {
+export default function Home({ products, locations }) {
+
+  const [selectedProduct, setSelectedProduct] = useState(parseInt(products[0].id));
+  const [startDate, setStartDate] = useState(new Date());
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [items, setItems] = useState([]);
+  const [totalUnit, setTotalUnit] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function removeItem(id) {
+    const newItems = items.filter(x => x.id !== id);
+    setItems(newItems);
+  };
+
+  function updateItem(id, e) {
+    const newItems = items.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          unit: parseInt(e.target.value)
+        }
+      }
+      return item;
+    })
+    setItems(newItems);
+  };
+
+  async function submitForm() {
+    const cartLocation = items.map(item => {
+      return {
+        id: item.id,
+        quantity: item.unit
+      }
+    })
+    const res = await addToCart({ locations: cartLocation, product: selectedProduct });
+    console.log({ res });
+  }
+
+  useEffect(() => {
+    let unit = 0;
+    let cost = 0;
+
+    items.map(item => {
+      unit+=item.unit,
+      cost = cost + (item.cost*item.unit)
+    });
+    setTotalUnit(unit);
+    setTotalCost(cost);
+  }, [items, setTotalUnit, setTotalCost])
+
+  console.log({ selectedProduct, startDate });
+
   return (
     <div className={styles.container}>
       <Head>
@@ -12,58 +75,102 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <div className={styles.mainbox}>
+          <h1>Calculator</h1>
+          <form>
+            <div className={styles.flexbox}>
+              <div>Product</div>
+              <div>
+                <select className={styles.dropdown} defaultValue={parseInt(products[0].id)} onChange={e => setSelectedProduct(parseInt(e.target.value))}>
+                  {products.map(product =>
+                      <option key={product.id} value={product.id}>{product.name}</option>
+                  )}
+                </select>
+              </div>
+            </div>
+            <div className={styles.flexbox}>
+              <div>
+                Date
+              </div>
+              <div>
+                <DatePicker format={'YYYY-MM-DD'} className={styles.datepicker} selected={startDate} onChange={(date) => setStartDate(date)} />
+              </div>
+            </div>
+            <div className={styles.flextitle}>
+              <div>Locations</div>
+              <div>
+                <div className={styles.flexitem}>
+                  <div>
+                    <div>
+                      Place
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      Units
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      Cost
+                    </div>
+                  </div>
+                  <div>
+                    <button className={styles.button} type="button" onClick={openModal}>Add</button>
+                  </div>
+                </div>
+                {items.map(item => {
+                  return <div key={item.id} className={styles.flexitem}>
+                    <div>
+                      <div>
+                        {item.name}
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <input className={styles.input} type="text" defaultValue={item.unit} onChange={e => updateItem(item.id, e)} />
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        {item.cost}
+                      </div>
+                    </div>
+                    <div>
+                      <button className={styles.button} type="button" onClick={() => removeItem(item.id)}>x</button>
+                    </div>
+                  </div>
+                })}
+              </div>
+            </div>
+            <div className={styles.flexbox}>
+              <div>Total Units</div>
+              <div>{totalUnit}</div>
+            </div>
+            <div className={styles.flexbox}>
+              <div>Total Cost</div>
+              <div>{totalCost}</div>
+            </div>
+            <div className={styles.flexbox}>
+              <div>
+                <button className={styles.button} type="button" onClick={() => submitForm()}>Submit</button>
+              </div>
+            </div>
+          </form>
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+      <ModalBox modalIsOpen={modalIsOpen} closeModal={closeModal} locations={locations} setItems={setItems} items={items} />
     </div>
   )
 }
+
+export async function getServerSideProps() {
+  const products = await getProduct();
+  const locations = await getLocation();
+  return {
+    props: {
+      products,
+      locations
+    }
+  }
+};

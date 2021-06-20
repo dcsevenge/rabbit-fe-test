@@ -1,0 +1,29 @@
+.googlebox {
+  width: 80vw;
+  height: 80vh;
+}
+
+.contextBox {
+  width: 200px;
+  display: block;
+}
+
+.title {
+  margin: 0.5rem 1rem;
+}
+
+.button {
+  margin: 0.5rem 1rem;
+  padding: 0.5rem;
+}
+
+.flexbox {
+  display: flex;
+  flex-wrap: wrap;
+  width: 200px;
+  > * {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: 0.5rem 1rem;
+  }
+}

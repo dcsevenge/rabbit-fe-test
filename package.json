@@ -9,9 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.2.0",
+    "google-map-react": "^2.1.9",
     "next": "11.0.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-datepicker": "^4.1.1",
+    "react-dom": "17.0.2",
+    "react-modal": "^3.14.3",
+    "sass": "^1.35.1"
   },
   "devDependencies": {
     "eslint": "7.29.0",
