@@ -3,8 +3,8 @@ import React from "react";
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-const DatePickerBox = ({ defaultValue, onChange, value }) => {
-  return <DatePicker className={styles.datepicker} selected={startDate} onChange={(date) => setStartDate(date)} />
+const DatePickerBox = ({ onChange, selected }) => {
+  return <DatePicker className={styles.datepicker} selected={selected} onChange={onChange} />
 }
 
 export default DatePickerBox;

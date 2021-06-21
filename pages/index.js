@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.scss'
 import { getLocation, getProduct, addToCart } from '../lib/api'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import DatePickerBox from '../component/DatePickerBox'
 import ModalBox from '../component/ModalBox'
 import Button from '../component/Button'
 import Dropdown from '../component/Dropdown'
@@ -55,7 +54,7 @@ export default function Home({ products, locations }) {
     })
     const res = await addToCart({ locations: cartLocation, product: selectedProduct, date: moment(startDate).format('YYYY-MM-DD') });
     alert('success');
-    window.location.reload();
+    // window.location.reload();
   }
 
   function calculate() {
@@ -104,7 +103,7 @@ export default function Home({ products, locations }) {
                 Date
               </div>
               <div>
-                <DatePicker className={styles.datepicker} selected={startDate} onChange={(date) => setStartDate(date)} />
+                <DatePickerBox selected={startDate} onChange={(date) => setStartDate(date)} />
               </div>
             </div>
             <div className={styles.flextitle}>
