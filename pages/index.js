@@ -12,11 +12,12 @@ import moment from 'moment';
 export default function Home({ products, locations }) {
 
   const [selectedProduct, setSelectedProduct] = useState(parseInt(products[0].id));
-  const [startDate, setStartDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [modalIsOpen, setIsOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [totalUnit, setTotalUnit] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
+  const [errorMsg, setErrorMsg] = useState([]);
 
   function openModal() {
     setIsOpen(true);
@@ -45,16 +46,39 @@ export default function Home({ products, locations }) {
     setItems(newItems);
   };
 
+  function validate() {
+    const errArr = [];
+    const startDate = new Date();
+    const endDate = new Date();
+    startDate.setDate(startDate.getDate() + 1);
+    endDate.setDate(endDate.getDate() + 7);
+    const isBetween = moment(selectedDate).isBetween(startDate, endDate);
+    if (items.length < 1) {
+      errArr.push('No selected locations.')
+    }
+    if (!isBetween) {
+      errArr.push('Date is out of range.')
+    }
+    setErrorMsg(errArr);
+  }
+
   async function submitForm() {
-    const cartLocation = items.map(item => {
-      return {
-        id: item.id,
-        quantity: item.unit
-      }
-    })
-    const res = await addToCart({ locations: cartLocation, product: selectedProduct, date: moment(startDate).format('YYYY-MM-DD') });
-    alert('success');
-    // window.location.reload();
+    const isValidate = validate();
+    if (isValidate) {
+      const cartLocation = items.map(item => {
+        return {
+          id: item.id,
+          quantity: item.unit
+        }
+      })
+      const res = await addToCart({
+        locations: cartLocation,
+        product: selectedProduct,
+        date: moment(selectedDate).format('YYYY-MM-DD')
+      });
+      alert('success');
+      // window.location.reload();
+    }
   }
 
   function calculate() {
@@ -78,7 +102,13 @@ export default function Home({ products, locations }) {
       value: product.id,
       label: product.name
     }
-  })
+  });
+
+  function ErrorMessage() {
+    return errorMsg.map((msg,index) => {
+      return <div key={index}>{msg}</div>
+    })
+  }
 
   return (
     <div className={styles.container}>
@@ -103,7 +133,7 @@ export default function Home({ products, locations }) {
                 Date
               </div>
               <div>
-                <DatePickerBox selected={startDate} onChange={(date) => setStartDate(date)} />
+                <DatePickerBox selected={selectedDate} onChange={(date) => setSelectedDate(date)} />
               </div>
             </div>
             <div className={styles.flextitle}>
@@ -163,9 +193,12 @@ export default function Home({ products, locations }) {
               <div>Total Cost</div>
               <div>{totalCost}</div>
             </div>
-            <div className={styles.flexbox}>
-              <div>
+            <div className={styles.flextitle}>
+              <div className={styles.flexitem}>
                 <Button onClick={() => submitForm()} label={`Submit`} />
+              </div>
+              <div className={styles.errorMsg}>
+                <ErrorMessage />
               </div>
             </div>
           </form>
