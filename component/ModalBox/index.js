@@ -107,13 +107,15 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       style={customStyles}
-      contentLabel="Example Modal"
+      contentLabel=""
       ariaHideApp={false}
   >
     <div>
-      <button type="button" onClick={() => clearModal()}>
-        x
-      </button>
+      <div className={styles.textRight}>
+        <button className={styles.button} type="button" onClick={() => clearModal()}>
+          x
+        </button>
+      </div>
       <div className={styles.googlebox}>
         {isLoaded ? (
             <GoogleMap

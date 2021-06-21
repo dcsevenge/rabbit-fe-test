@@ -1,3 +1,5 @@
+$small: 768px;
+
 .container {
   min-height: 100vh;
   padding: 0 0.5rem;
@@ -15,15 +17,29 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: $small) {
+    padding: 0.5rem 0;
+    margin-top: 3rem;
+    width: 100%;
+  }
   .mainbox {
     padding: 2rem;
     border: 1px solid #ccc;
+    @media screen and (max-width: $small) {
+      padding: 0.5rem;
+      width: 100%;
+    }
   }
   .flexbox {
     display: flex;
     flex-wrap: wrap;
-    width: 768px;
+    width: 700px;
     align-items: center;
+    @media screen and (max-width: $small) {
+      display: block;
+      width: 100%;
+      max-width: 700px;
+    }
     > * {
       flex-grow: 1;
       flex-basis: 0;
@@ -37,7 +53,8 @@
     flex-wrap: wrap;
     display: flex;
     align-items: flex-start;
-    width: 768px;
+    width: 100%;
+    max-width: 700px;
     > * {
       flex-grow: 1;
       flex-basis: 0;
@@ -46,26 +63,49 @@
     :first-child {
       flex: 0 0 30%;
     }
+    @media screen and (max-width: $small) {
+      display: block;
+    }
   }
   .flexitem {
     flex-wrap: wrap;
     display: flex;
     align-items: flex-start;
     > * {
+      align-items: center;
       flex-grow: 1;
       flex-basis: 0;
       margin-bottom: 8px;
     }
   }
-  .button {
-    padding: 0.5rem;
+}
+
+.button {
+  padding: 8px 16px;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  &:hover {
+    cursor: pointer;
+    background: #eee;
   }
 }
 
 .dropdown, .datepicker {
   padding: 8px;
+  border-radius: 4px;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
 .input {
   width: 80%;
+  border-radius: 4px;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }

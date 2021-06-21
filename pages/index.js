@@ -8,7 +8,7 @@ import ModalBox from '../component/ModalBox'
 import moment from 'moment';
 
 export default function Home({ products, locations }) {
-  
+
   const [selectedProduct, setSelectedProduct] = useState(parseInt(products[0].id));
   const [startDate, setStartDate] = useState(new Date());
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -102,7 +102,9 @@ export default function Home({ products, locations }) {
               </div>
             </div>
             <div className={styles.flextitle}>
-              <div>Locations</div>
+              <div className={styles.flexitem}>
+                <div>Locations</div>
+              </div>
               <div>
                 <div className={styles.flexitem}>
                   <div>
