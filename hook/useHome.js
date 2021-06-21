@@ -44,7 +44,7 @@ export default function useHome({ products }) {
     const errArr = [];
     const startDate = new Date();
     const endDate = new Date();
-    startDate.setDate(startDate.getDate() + 1);
+    startDate.setDate(startDate.getDate());
     endDate.setDate(endDate.getDate() + 7);
     const isBetween = moment(selectedDate).isBetween(startDate, endDate);
 
@@ -65,6 +65,7 @@ export default function useHome({ products }) {
       return true;
     }
     setErrorMsg(errArr);
+    return false;
   }
 
   async function submitForm() {
