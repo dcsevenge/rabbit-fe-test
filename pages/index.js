@@ -55,11 +55,22 @@ export default function Home({ products, locations }) {
     startDate.setDate(startDate.getDate() + 1);
     endDate.setDate(endDate.getDate() + 7);
     const isBetween = moment(selectedDate).isBetween(startDate, endDate);
+
+    const isOverStock = items.some(item => {
+      return item.maxDist < item.unit
+    })
+
     if (items.length < 1) {
       errArr.push('No selected locations.')
     }
     if (!isBetween) {
       errArr.push('Date is out of range.')
+    }
+    if (isOverStock) {
+      errArr.push('Out of max distribution')
+    }
+    if (errArr.length === 0) {
+      return true;
     }
     setErrorMsg(errArr);
   }

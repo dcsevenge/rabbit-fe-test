@@ -83,13 +83,14 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
   };
 
   const addItemToList = (selectedPlace, selectedProduct) => {
-    const { id, name, fee } = selectedPlace;
+    const { id, name, fee, max_dist } = selectedPlace;
     const item = {
       id,
       name,
       fee,
       unit: 1,
-      cost: selectedProduct.price_per_unit + fee
+      cost: selectedProduct.price_per_unit + fee,
+      maxDist: max_dist
     }
     items.push(item);
     setItems(items);
