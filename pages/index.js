@@ -11,7 +11,7 @@ import moment from 'moment';
 
 export default function Home({ products, locations }) {
 
-  const [selectedProduct, setSelectedProduct] = useState(parseInt(products[0].id));
+  const [selectedProduct, setSelectedProduct] = useState(products[0]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [modalIsOpen, setIsOpen] = useState(false);
   const [items, setItems] = useState([]);
@@ -36,9 +36,11 @@ export default function Home({ products, locations }) {
   function updateItem(id, qty) {
     const newItems = items.map(item => {
       if (item.id === id) {
+        const { price_per_unit } = selectedProduct;
         return {
           ...item,
-          unit: parseInt(qty)
+          unit: parseInt(qty),
+          cost: (price_per_unit*parseInt(qty)) + item.fee
         }
       }
       return item;
@@ -73,7 +75,7 @@ export default function Home({ products, locations }) {
       })
       const res = await addToCart({
         locations: cartLocation,
-        product: selectedProduct,
+        product: selectedProduct.id,
         date: moment(selectedDate).format('YYYY-MM-DD')
       });
       alert('success');
@@ -87,15 +89,21 @@ export default function Home({ products, locations }) {
 
     items.map(item => {
       unit+=item.unit,
-      cost = cost + (item.cost*item.unit)
+      cost+=item.cost
     });
     setTotalUnit(unit);
     setTotalCost(cost);
   }
 
   useEffect(() => {
+    items.map(item => {
+      updateItem(item.id, item.unit)
+    })
+  }, [selectedProduct]);
+
+  useEffect(() => {
     calculate(items);
-  }, [items, setTotalUnit, setTotalCost]);
+  }, [items, selectedProduct, setTotalUnit, setTotalCost]);
 
   const dropdownItems = products.map(product => {
     return {
@@ -125,7 +133,7 @@ export default function Home({ products, locations }) {
             <div className={styles.flexbox}>
               <div>Product</div>
               <div>
-                <Dropdown defaultValue={parseInt(products[0].id)} onChange={e => setSelectedProduct(parseInt(e.target.value))} items={dropdownItems} />
+                <Dropdown defaultValue={products[0]} onChange={e => setSelectedProduct(products.filter(product => parseInt(product.id) === parseInt(e.target.value))[0])} items={dropdownItems} />
               </div>
             </div>
             <div className={styles.flexbox}>
@@ -204,7 +212,7 @@ export default function Home({ products, locations }) {
           </form>
         </div>
       </main>
-      <ModalBox modalIsOpen={modalIsOpen} closeModal={closeModal} locations={locations} setItems={setItems} items={items} />
+      <ModalBox modalIsOpen={modalIsOpen} closeModal={closeModal} locations={locations} setItems={setItems} items={items} selectedProduct={selectedProduct} />
     </div>
   )
 }

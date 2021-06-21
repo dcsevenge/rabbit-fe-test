@@ -20,7 +20,7 @@ const customStyles = {
   },
 };
 
-export default function ModalBox({ locations, modalIsOpen, closeModal, items, setItems }) {
+export default function ModalBox({ locations, modalIsOpen, closeModal, items, setItems, selectedProduct }) {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -82,13 +82,14 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
     }
   };
 
-  const addItemToList = selectedPlace => {
+  const addItemToList = (selectedPlace, selectedProduct) => {
     const { id, name, fee } = selectedPlace;
     const item = {
       id,
       name,
-      cost: fee,
-      unit: 1
+      fee,
+      unit: 1,
+      cost: selectedProduct.price_per_unit + fee
     }
     items.push(item);
     setItems(items);
@@ -146,7 +147,7 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
                         <div>{selectedPlace.fee}</div>
                       </div>
                       <div>
-                        <Button disabled={selectedPlace.isDisable && `disabled`} onClick={() => addItemToList(selectedPlace)} label={`Add`} />
+                        <Button disabled={selectedPlace.isDisable && `disabled`} onClick={() => addItemToList(selectedPlace, selectedProduct)} label={`Add`} />
                       </div>
                     </div>
                   </InfoWindow>
