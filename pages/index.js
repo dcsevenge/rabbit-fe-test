@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import ModalBox from '../component/ModalBox'
 import Button from '../component/Button'
 import Dropdown from '../component/Dropdown'
+import Input from '../component/Input'
 import moment from 'moment';
 
 export default function Home({ products, locations }) {
@@ -95,11 +96,6 @@ export default function Home({ products, locations }) {
             <div className={styles.flexbox}>
               <div>Product</div>
               <div>
-                {/*<select className={styles.dropdown} >*/}
-                {/*  {products.map(product =>*/}
-                {/*      <option key={product.id} value={product.id}>{product.name}</option>*/}
-                {/*  )}*/}
-                {/*</select>*/}
                 <Dropdown defaultValue={parseInt(products[0].id)} onChange={e => setSelectedProduct(parseInt(e.target.value))} items={dropdownItems} />
               </div>
             </div>
@@ -145,7 +141,7 @@ export default function Home({ products, locations }) {
                     </div>
                     <div>
                       <div>
-                        <input className={styles.input} type="text" defaultValue={item.unit}onChange={e => updateItem(item.id, e.target.value)} />
+                        <Input type={`text`} defaultValue={item.unit} onChange={e => updateItem(item.id, e.target.value)} />
                       </div>
                     </div>
                     <div>
@@ -154,7 +150,7 @@ export default function Home({ products, locations }) {
                       </div>
                     </div>
                     <div>
-                      <button className={styles.button} type="button" onClick={() => removeItem(item.id)}>x</button>
+                      <Button onClick={() => removeItem(item.id)} label={`x`} />
                     </div>
                   </div>
                 })}
