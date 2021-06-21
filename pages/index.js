@@ -5,9 +5,10 @@ import { getLocation, getProduct, addToCart } from '../lib/api'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import ModalBox from '../component/ModalBox'
+import moment from 'moment';
 
 export default function Home({ products, locations }) {
-
+  
   const [selectedProduct, setSelectedProduct] = useState(parseInt(products[0].id));
   const [startDate, setStartDate] = useState(new Date());
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ export default function Home({ products, locations }) {
 
   function closeModal() {
     setIsOpen(false);
+    calculate(items);
   }
 
   function removeItem(id) {
@@ -28,12 +30,12 @@ export default function Home({ products, locations }) {
     setItems(newItems);
   };
 
-  function updateItem(id, e) {
+  function updateItem(id, qty) {
     const newItems = items.map(item => {
       if (item.id === id) {
         return {
           ...item,
-          unit: parseInt(e.target.value)
+          unit: parseInt(qty)
         }
       }
       return item;
@@ -48,11 +50,12 @@ export default function Home({ products, locations }) {
         quantity: item.unit
       }
     })
-    const res = await addToCart({ locations: cartLocation, product: selectedProduct });
-    console.log({ res });
+    const res = await addToCart({ locations: cartLocation, product: selectedProduct, date: moment(startDate).format('YYYY-MM-DD') });
+    alert('success');
+    // window.location.reload();
   }
 
-  useEffect(() => {
+  function calculate() {
     let unit = 0;
     let cost = 0;
 
@@ -62,9 +65,11 @@ export default function Home({ products, locations }) {
     });
     setTotalUnit(unit);
     setTotalCost(cost);
-  }, [items, setTotalUnit, setTotalCost])
+  }
 
-  console.log({ selectedProduct, startDate });
+  useEffect(() => {
+    calculate(items);
+  }, [items, setTotalUnit, setTotalCost]);
 
   return (
     <div className={styles.container}>
@@ -93,7 +98,7 @@ export default function Home({ products, locations }) {
                 Date
               </div>
               <div>
-                <DatePicker format={'YYYY-MM-DD'} className={styles.datepicker} selected={startDate} onChange={(date) => setStartDate(date)} />
+                <DatePicker className={styles.datepicker} selected={startDate} onChange={(date) => setStartDate(date)} />
               </div>
             </div>
             <div className={styles.flextitle}>
@@ -128,7 +133,7 @@ export default function Home({ products, locations }) {
                     </div>
                     <div>
                       <div>
-                        <input className={styles.input} type="text" defaultValue={item.unit} onChange={e => updateItem(item.id, e)} />
+                        <input className={styles.input} type="text" defaultValue={item.unit}onChange={e => updateItem(item.id, e.target.value)} />
                       </div>
                     </div>
                     <div>
