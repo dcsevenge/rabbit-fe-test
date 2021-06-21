@@ -82,7 +82,7 @@ export default function useHome({ products }) {
         date: moment(selectedDate).format('YYYY-MM-DD')
       });
       alert('success');
-      // window.location.reload();
+      window.location.reload();
     }
   }
 
