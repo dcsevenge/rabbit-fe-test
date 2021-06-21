@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Modal from 'react-modal';
 import styles from '../../styles/ModalBox.module.scss'
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
+import Button from '../Button';
 
 const containerStyle = {
   width: '100%',
@@ -26,15 +27,14 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
     googleMapsApiKey: "AIzaSyClAg0Y6cz98UNLzPdpBQ8qeLfwT9U2iZ4"
   })
 
-  const [mapRef, setMapRef] = useState(null);
+  const [, setMapRef] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [markerMap, setMarkerMap] = useState({});
-  const [center, setCenter] = useState({
+  const center = {
     lat: 13.7370587,
     lng: 100.5603061
-  });
+  };
   const [zoom, setZoom] = useState(5);
-  const [clickedLatLng, setClickedLatLng] = useState(null);
   const [infoOpen, setInfoOpen] = useState(false);
 
   const onLoad = useCallback(map => {
@@ -80,9 +80,6 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
     if (zoom < 16) {
       setZoom(16);
     }
-
-    // if you want to center the selected Marker
-    //setCenter(place.pos)
   };
 
   const addItemToList = selectedPlace => {
@@ -112,9 +109,7 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
   >
     <div>
       <div className={styles.textRight}>
-        <button className={styles.button} type="button" onClick={() => clearModal()}>
-          x
-        </button>
+        <Button onClick={() => clearModal()} text={`x`} />
       </div>
       <div className={styles.googlebox}>
         {isLoaded ? (
@@ -151,7 +146,7 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
                         <div>{selectedPlace.fee}</div>
                       </div>
                       <div>
-                        <button disabled={selectedPlace.isDisable && `disabled`} className={styles.button} type="button" onClick={() => addItemToList(selectedPlace)}>Add</button>
+                        <Button disabled={selectedPlace.isDisable && `disabled`} onClick={() => addItemToList(selectedPlace)} text={`Add`} />
                       </div>
                     </div>
                   </InfoWindow>

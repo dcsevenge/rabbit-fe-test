@@ -5,6 +5,7 @@ import { getLocation, getProduct, addToCart } from '../lib/api'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import ModalBox from '../component/ModalBox'
+import Button from '../component/Button'
 import moment from 'moment';
 
 export default function Home({ products, locations }) {
@@ -52,7 +53,7 @@ export default function Home({ products, locations }) {
     })
     const res = await addToCart({ locations: cartLocation, product: selectedProduct, date: moment(startDate).format('YYYY-MM-DD') });
     alert('success');
-    // window.location.reload();
+    window.location.reload();
   }
 
   function calculate() {
@@ -123,7 +124,7 @@ export default function Home({ products, locations }) {
                     </div>
                   </div>
                   <div>
-                    <button className={styles.button} type="button" onClick={openModal}>Add</button>
+                    <Button onClick={openModal} text={`Add`} />
                   </div>
                 </div>
                 {items.map(item => {
@@ -160,7 +161,7 @@ export default function Home({ products, locations }) {
             </div>
             <div className={styles.flexbox}>
               <div>
-                <button className={styles.button} type="button" onClick={() => submitForm()}>Submit</button>
+                <Button onClick={() => submitForm()} text={`Submit`} />
               </div>
             </div>
           </form>
