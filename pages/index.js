@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import ModalBox from '../component/ModalBox'
 import Button from '../component/Button'
+import Dropdown from '../component/Dropdown'
 import moment from 'moment';
 
 export default function Home({ products, locations }) {
@@ -72,6 +73,13 @@ export default function Home({ products, locations }) {
     calculate(items);
   }, [items, setTotalUnit, setTotalCost]);
 
+  const dropdownItems = products.map(product => {
+    return {
+      value: product.id,
+      label: product.name
+    }
+  })
+
   return (
     <div className={styles.container}>
       <Head>
@@ -87,11 +95,12 @@ export default function Home({ products, locations }) {
             <div className={styles.flexbox}>
               <div>Product</div>
               <div>
-                <select className={styles.dropdown} defaultValue={parseInt(products[0].id)} onChange={e => setSelectedProduct(parseInt(e.target.value))}>
-                  {products.map(product =>
-                      <option key={product.id} value={product.id}>{product.name}</option>
-                  )}
-                </select>
+                {/*<select className={styles.dropdown} >*/}
+                {/*  {products.map(product =>*/}
+                {/*      <option key={product.id} value={product.id}>{product.name}</option>*/}
+                {/*  )}*/}
+                {/*</select>*/}
+                <Dropdown defaultValue={parseInt(products[0].id)} onChange={e => setSelectedProduct(parseInt(e.target.value))} items={dropdownItems} />
               </div>
             </div>
             <div className={styles.flexbox}>
@@ -124,7 +133,7 @@ export default function Home({ products, locations }) {
                     </div>
                   </div>
                   <div>
-                    <Button onClick={openModal} text={`Add`} />
+                    <Button onClick={openModal} label={`Add`} />
                   </div>
                 </div>
                 {items.map(item => {
@@ -161,7 +170,7 @@ export default function Home({ products, locations }) {
             </div>
             <div className={styles.flexbox}>
               <div>
-                <Button onClick={() => submitForm()} text={`Submit`} />
+                <Button onClick={() => submitForm()} label={`Submit`} />
               </div>
             </div>
           </form>

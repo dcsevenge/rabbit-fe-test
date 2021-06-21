@@ -109,7 +109,7 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
   >
     <div>
       <div className={styles.textRight}>
-        <Button onClick={() => clearModal()} text={`x`} />
+        <Button onClick={() => clearModal()} label={`x`} />
       </div>
       <div className={styles.googlebox}>
         {isLoaded ? (
@@ -146,7 +146,7 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
                         <div>{selectedPlace.fee}</div>
                       </div>
                       <div>
-                        <Button disabled={selectedPlace.isDisable && `disabled`} onClick={() => addItemToList(selectedPlace)} text={`Add`} />
+                        <Button disabled={selectedPlace.isDisable && `disabled`} onClick={() => addItemToList(selectedPlace)} label={`Add`} />
                       </div>
                     </div>
                   </InfoWindow>
