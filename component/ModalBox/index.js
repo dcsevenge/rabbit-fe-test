@@ -24,7 +24,7 @@ export default function ModalBox({ locations, modalIsOpen, closeModal, items, se
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyClAg0Y6cz98UNLzPdpBQ8qeLfwT9U2iZ4"
+    googleMapsApiKey: ""
   })
 
   const [, setMapRef] = useState(null);
